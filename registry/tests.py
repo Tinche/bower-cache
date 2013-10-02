@@ -1,9 +1,13 @@
 import json
-from api.models import Package
+from .models import Package
 from django.test import TestCase
+from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 
 
+@override_settings(DATABASES=
+        {'default': {'ENGINE': 'django.db.backends.sqlite3', 
+                     'NAME': '.test_db'}})
 class PackagesListViewTests(TestCase):
 
     def test_returns_list_of_packages(self):

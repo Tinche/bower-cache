@@ -1,8 +1,10 @@
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+REPO_ROOT = '/var/git'
+REPO_URL = 'git://localhost/'
 MANAGERS = ADMINS
 ALLOWED_HOSTS = []
 TIME_ZONE = 'America/Chicago'
@@ -35,17 +37,19 @@ MIDDLEWARE_CLASSES = (
 )
 ROOT_URLCONF = 'registry.urls'
 TEMPLATE_DIRS = (
+    'templates',
 )
 INSTALLED_APPS = (
+    'registry',
     'south',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api'
 )
 LOGGING = {
     'version': 1,
@@ -68,5 +72,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+    }
+}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '.local_db',
     }
 }
