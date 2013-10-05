@@ -1,2 +1,12 @@
+.coverage
 *.pyc
 .local_db
+
+# Virtualenv
+bin
+include
+lib
+local
+
+# Gathered Django static files
+static/

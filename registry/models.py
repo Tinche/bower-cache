@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.base import ModelBase
 from git.repo.base import Repo
 
+from .gitwrapper import pull_from_origin
 from .managers import ClonedRepoManager
 from .settings import REPO_ROOT, REPO_URL
 
@@ -37,8 +38,7 @@ class ClonedRepo(models.Model):
 
     def pull(self):
         """Pull from the origin."""
-        repo = Repo(join(REPO_ROOT, self.name))
-        repo.remotes.origin.pull()
+        pull_from_origin(join(REPO_ROOT, self.name))
 
     def to_package(self):
         """Return the package representation of this repo."""

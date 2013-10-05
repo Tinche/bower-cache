@@ -1,11 +1,13 @@
 import logging
 
 from django.conf.urls import patterns, url
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
 from django.shortcuts import redirect, get_object_or_404
 from .models import ClonedRepo, Package
 from .query import ClonedRepoQuerySet
+
+logger = logging.getLogger(__name__)
 
 class ClonedRepoChangeList(ChangeList):
 
@@ -44,10 +46,13 @@ class ClonedRepoAdmin(admin.ModelAdmin):
         """Hide the origin field from editing, but not creation."""
         return ('origin',) if obj else ()
 
-    def git_pull_view(self, _, repo_name):
+    def git_pull_view(self, request, repo_name):
         """Perform a git pull and redirect back to the repo."""
-        repo = get_object_or_404(self.model)
+        logger.info("Pull requested for %s." % repo_name)
+        repo = get_object_or_404(self.model, name=repo_name)
         repo.pull()
+        self.message_user(request, "Repo %s successfully updated." % repo_name, 
+                          level=messages.SUCCESS)
         return redirect('admin:registry_clonedrepo_change', repo_name) 
 
 admin.site.register(Package)

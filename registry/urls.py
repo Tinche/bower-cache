@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
-from .views import PackagesListView, PackagesRetrieveView, PackagesSearchView
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from .views import PackagesListView, PackagesRetrieveView, PackagesSearchView
 
 admin.autodiscover()
 
@@ -10,3 +12,7 @@ urlpatterns = patterns('',
     url(r'^packages/search/(?P<name>[-\w]+)/$', PackagesSearchView.as_view(), name='search'),
     url(r'^admin/', include(admin.site.urls)),
 )
+
+# This only works when DEBUG = True.
+urlpatterns += staticfiles_urlpatterns()
+

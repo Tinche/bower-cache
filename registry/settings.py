@@ -15,7 +15,7 @@ USE_L10N = True
 USE_TZ = True
 MEDIA_ROOT = ''
 MEDIA_URL = ''
-STATIC_ROOT = ''
+STATIC_ROOT = 'static/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 )
@@ -40,8 +40,6 @@ TEMPLATE_DIRS = (
     'templates',
 )
 INSTALLED_APPS = (
-    'registry',
-    'south',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
@@ -49,6 +47,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registry',
     'rest_framework',
 )
 LOGGING = {
@@ -64,7 +63,11 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
@@ -72,6 +75,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'registry': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     }
 }
 DATABASES = {

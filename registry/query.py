@@ -1,3 +1,4 @@
+import logging
 import os
 from os import path
 
@@ -6,6 +7,8 @@ from django.db.models import query
 from git.repo.base import Repo
 from .settings import REPO_ROOT
 
+logger = logging.getLogger(__name__)
+
 class ClonedRepoQuerySet(query.QuerySet):
     def __init__(self, model=None, repos=None):
         self.repos = repos if repos is not None \
@@ -13,6 +16,7 @@ class ClonedRepoQuerySet(query.QuerySet):
         self.model = model
 
     def get(self, *args, **kwargs):
+        logger.debug("Get called with %s, %s" % (str(args), str(kwargs)))
         results = self.filter(**kwargs)
         if not results:
             raise self.model.DoesNotExist()
