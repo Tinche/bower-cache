@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.base import ModelBase
 from git.repo.base import Repo
 
-from .gitwrapper import pull_from_origin
+from .gitwrapper import pull_from_origin, clone_from
 from .managers import ClonedRepoManager
 from .settings import REPO_ROOT, REPO_URL
 
@@ -31,7 +31,7 @@ class ClonedRepo(models.Model):
     objects = ClonedRepoManager()
 
     def save(self, *args, **kwargs):
-        repo = Repo.clone_from(self.origin, join(REPO_ROOT, self.name))
+        clone_from(self.origin, join(REPO_ROOT, self.name))
 
     def delete(self, *args, **kwargs):
         rmtree(join(REPO_ROOT, self.name))
@@ -45,7 +45,7 @@ class ClonedRepo(models.Model):
         return Package(name=self.name, url=REPO_URL + self.name)
 
     def __str__(self):
-        return "%s (cloned from [%s])" % (self.name, self.origin)
+        return "%s (cloned from %s)" % (self.name, self.origin)
 
     class Meta(object):
         managed = False

@@ -1,10 +1,18 @@
+# Bower caching proxy specific settings.
+REPO_ROOT = '/var/git'
+REPO_URL = 'git://localhost/'
+UPSTREAM_BOWER_REGISTRY = 'https://bower.herokuapp.com'
+
+# Celery settings.
+BROKER_URL = 'django://'
+import djcelery
+djcelery.setup_loader()
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
-REPO_ROOT = '/var/git'
-REPO_URL = 'git://localhost/'
 MANAGERS = ADMINS
 ALLOWED_HOSTS = []
 TIME_ZONE = 'America/Chicago'
@@ -47,6 +55,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djcelery',
+    'kombu.transport.django',
     'registry',
     'rest_framework',
 )
@@ -85,6 +95,6 @@ LOGGING = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '.local_db',
+        'NAME': 'local_db',
     }
 }

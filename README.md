@@ -1,4 +1,4 @@
-## Bower registry (the Python/Django edition)
+## Bower Cache (the Python/Django edition)
 
 This is a combination Bower registry/caching proxy. It can do two things:
 
@@ -14,7 +14,7 @@ The admin interface is available for both functionalities.
 
 ## Sync your database and create an admin user
 
-    python manage.py syncdb 
+    python manage.py syncdb
 
 ## Run the webserver locally
 

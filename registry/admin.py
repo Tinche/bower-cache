@@ -1,13 +1,16 @@
 import logging
 
+from django.core.exceptions import ValidationError
 from django.conf.urls import patterns, url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
 from django.shortcuts import redirect, get_object_or_404
+
 from .models import ClonedRepo, Package
 from .query import ClonedRepoQuerySet
 
-logger = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
+
 
 class ClonedRepoChangeList(ChangeList):
 
@@ -24,6 +27,7 @@ class ClonedRepoChangeList(ChangeList):
         self.paginator = self.model_admin.get_paginator(request,
                                                         self.result_list,
                                                         self.list_per_page)
+
 
 class ClonedRepoAdmin(admin.ModelAdmin):
     actions = None
@@ -42,13 +46,39 @@ class ClonedRepoAdmin(admin.ModelAdmin):
     def get_changelist(self, request, **kwargs):
         return ClonedRepoChangeList
 
+    def get_form(self, request, obj=None, **kwargs):
+        if obj is not None:
+            return super(self, ClonedRepoAdmin)
+        else:
+            # Here we override the form for creation.
+            return super(self, ClonedRepoAdmin)
+
     def get_readonly_fields(self, request, obj=None):
         """Hide the origin field from editing, but not creation."""
         return ('origin',) if obj else ()
 
+    def add_view(self, request, **kwargs):
+        """A custom add_view, to catch exceptions from 'save_model'."""
+        try:
+            return super(ClonedRepoAdmin, self).add_view(request, **kwargs)
+        except ValidationError:
+            # Rerender the form.
+            return redirect(request.path)
+
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.save()
+        except Exception as exc:
+            self.message_user(request, "Save failed: %s" % str(exc.message),
+                              level=messages.ERROR)
+            raise ValidationError(str(exc))
+        else:
+            self.message_user(request, "Save succeded.",
+                              level=messages.SUCCESS)
+
     def git_pull_view(self, request, repo_name):
         """Perform a git pull and redirect back to the repo."""
-        logger.info("Pull requested for %s." % repo_name)
+        LOG.info("Pull requested for %s." % repo_name)
         repo = get_object_or_404(self.model, name=repo_name)
         repo.pull()
         self.message_user(request, "Repo %s successfully updated." % repo_name, 

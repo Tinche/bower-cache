@@ -1,12 +1,18 @@
 .coverage
 *.pyc
 .local_db
+.idea
 
 # Virtualenv
 bin
 include
 lib
 local
+bower_cache.egg-info/*
+dist/*
 
 # Gathered Django static files
 static/
+
+# The local database.
+local_db
