@@ -14,10 +14,10 @@ from . import bowerlib, tasks, settings
 LOG = logging.getLogger(__name__)
 
 
-class RequestAccepted(APIException):
+class ServiceUnavailable(APIException):
     """Short-circuit a view and just return the status code."""
-    status_code = status.HTTP_202_ACCEPTED
-    detail = "Request Accepted"
+    status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    detail = "Try again later"
 
 
 class PackagesListView(ListCreateAPIView):
@@ -69,6 +69,6 @@ class PackagesRetrieveView(RetrieveAPIView):
             result = task.get(timeout=5)
         except tasks.TimeoutError:
             # Not done yet. What to return?
-            raise RequestAccepted
+            raise ServiceUnavailable
 
         return result.to_package()
