@@ -1,4 +1,1 @@
-Django==1.5.4
-djangorestframework==2.3.8
-GitPython==0.3.2.RC1
-envoy==0.0.2
+-e .

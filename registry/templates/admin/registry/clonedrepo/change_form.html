@@ -6,3 +6,12 @@
 </li>
 {{ block.super }}
 {% endblock %}
+{% block field_sets %}
+{% if change %}
+    {{ block.super }}
+{% else %}
+    {% for fieldset in adminform %}
+        {% include "admin/registry/clonedrepo/add_model_fieldset.html" %}
+    {% endfor %}
+{% endif %}
+{% endblock %}

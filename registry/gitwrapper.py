@@ -20,14 +20,12 @@ class GitException(Exception):
     pass
 
 
-def pull_from_origin(repo_url):
+def pull_from_origin(repo_path):
     """Execute 'git pull' at the provided repo_path."""
-    LOG.info("Pulling from %s." % repo_url)
-    command = GIT_PULL_CMD.format(repo_url)
-    try:
-        resp = envoy.run(command)
-        assert resp.status_code == 0
-    except AssertionError:
+    LOG.info("Pulling from origin at %s." % repo_path)
+    command = GIT_PULL_CMD.format(repo_path)
+    resp = envoy.run(command)
+    if resp.status_code != 0:
         LOG.exception("Pull failed.")
         raise GitException(resp.std_err)
     else:
