@@ -1,5 +1,7 @@
 ## Bower Cache (the Python/Django edition)
 
+[![Build Status](https://travis-ci.org/Tinche/bower-cache.png)](https://travis-ci.org/Tinche/bower-cache)
+
 This is a combination Bower registry/caching proxy. It can do two things:
 
 * act as a registry (a name to URL mapper) for remote packages.
