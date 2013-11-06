@@ -1,4 +1,4 @@
-"""Wrappers for the systemwide git installation.
+"""Wrappers for the system-wide git installation.
 
 Since no current Python git libraries fulfill the needs of the project,
 the git binary is invoked via the envoy module.

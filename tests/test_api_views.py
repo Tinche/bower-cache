@@ -1,5 +1,5 @@
 import json
-from .models import Package
+from registry.models import Package
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.core.urlresolvers import reverse

@@ -6,10 +6,8 @@ import sys
 
 import registry
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 VERSION = registry.__version__
 
@@ -21,6 +19,20 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 readme = open('README.md').read()
+
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = ['tests']
+        self.test_suite = True
+
+    def run_tests(self):
+        #import here, cause outside the eggs aren't loaded
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
+
 
 setup(
     name='bower-cache',
@@ -35,13 +47,17 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'Django==1.5',
+        'Django >= 1.5, < 1.6',
         'djangorestframework==2.3.8',
         'envoy==0.0.2',
         'GitPython==0.3.2.RC1',
         'requests==2.0.0',
         'django-celery==3.0.23'
     ],
+    tests_require=[
+        'pytest-django',
+    ],
+    cmdclass={'test': PyTest},
     license="MIT",
     zip_safe=False,
     keywords='bower',
