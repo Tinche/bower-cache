@@ -4,4 +4,6 @@ python:
     - "2.7"
 before_install:
     - sudo apt-get install git
+before_script:
+    - sudo mkdir /var/git; sudo chown `whoami` /var/git
 script: python setup.py test
