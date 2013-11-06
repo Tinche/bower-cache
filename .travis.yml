@@ -5,5 +5,5 @@ python:
 before_install:
     - sudo apt-get install git
 before_script:
-    - sudo mkdir /var/git; sudo chown `whoami` /var/git
+    - bash -c 'sudo mkdir /var/git; sudo chown $USER /var/git'
 script: python setup.py test
