@@ -33,7 +33,7 @@ test-all:
 	tox
 
 coverage:
-	coverage run  setup.py test
+	coverage run setup.py test
 	coverage report -m
 
 docs:
