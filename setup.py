@@ -56,6 +56,7 @@ setup(
     ],
     tests_require=[
         'pytest-django',
+        'coverage',
     ],
     cmdclass={'test': PyTest},
     license="MIT",
