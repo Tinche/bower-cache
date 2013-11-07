@@ -6,6 +6,6 @@ before_install:
     - sudo apt-get install git
 before_script:
     - bash -c 'sudo mkdir /var/git; sudo chown $USER /var/git'
-script: python setup.py test
+script: make coverage
 after_success:
     - pip install python-coveralls && coveralls
