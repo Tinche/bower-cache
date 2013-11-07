@@ -7,3 +7,5 @@ before_install:
 before_script:
     - bash -c 'sudo mkdir /var/git; sudo chown $USER /var/git'
 script: python setup.py test
+after_success:
+    - pip install python-coveralls && coveralls
