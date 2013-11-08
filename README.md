@@ -1,6 +1,7 @@
 ## Bower Cache (the Python/Django edition)
 
 [![Build Status](https://travis-ci.org/Tinche/bower-cache.png)](https://travis-ci.org/Tinche/bower-cache)
+[![Coverage Status](https://coveralls.io/repos/Tinche/bower-cache/badge.png?branch=master)](https://coveralls.io/r/Tinche/bower-cache?branch=master)
 
 This is a combination Bower registry/caching proxy. It can do two things:
 
