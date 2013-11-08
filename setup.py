@@ -34,6 +34,22 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
+class Coverage(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = ['tests']
+        self.test_suite = True
+
+    def run_tests(self):
+        import coverage
+        import pytest
+        cov = coverage.coverage()
+        cov.start()
+        errno = pytest.main(self.test_args)
+        cov.stop()
+        cov.save()
+        sys.exit(errno)
+
 setup(
     name='bower-cache',
     version=VERSION,
@@ -58,7 +74,7 @@ setup(
         'pytest-django',
         'coverage',
     ],
-    cmdclass={'test': PyTest},
+    cmdclass={'test': PyTest, 'coverage': Coverage},
     license="MIT",
     zip_safe=False,
     keywords='bower',
