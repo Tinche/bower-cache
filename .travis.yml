@@ -8,5 +8,5 @@ before_script:
     - bash -c 'sudo mkdir /var/git; sudo chown $USER /var/git'
 script: python setup.py coverage
 after_success:
-    - coverage report
+    - pip install coverage && coverage report
     - pip install python-coveralls && coveralls
