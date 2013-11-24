@@ -5,9 +5,9 @@ from os import path
 from django.db.models import query
 
 from git.repo.base import Repo
-from .settings import REPO_ROOT
 
 logger = logging.getLogger(__name__)
+
 
 class ClonedRepoQuerySet(query.QuerySet):
     def __init__(self, model=None, repos=None):
@@ -57,10 +57,12 @@ class ClonedRepoQuerySet(query.QuerySet):
     @staticmethod
     def _get_all_repos():
         from .models import ClonedRepo
-        repo_dirs = (dir for dir in os.listdir(REPO_ROOT)
-                                 if path.isdir(path.join(REPO_ROOT, dir)))
+        from django.conf import settings
+        repo_root = settings.REPO_ROOT
+        repo_dirs = (dir for dir in os.listdir(repo_root)
+                                 if path.isdir(path.join(repo_root, dir)))
         repos = [ClonedRepo(name=repo_dir,
                             origin=ClonedRepoQuerySet._get_origin(
-                                         path.join(REPO_ROOT, repo_dir)))
+                                         path.join(repo_root, repo_dir)))
                  for repo_dir in repo_dirs]
         return repos

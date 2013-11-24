@@ -73,6 +73,8 @@ setup(
     tests_require=[
         'pytest-django',
         'coverage',
+        'mock',
+        'beautifulsoup4'
     ],
     cmdclass={'test': PyTest, 'coverage': Coverage},
     license="MIT",

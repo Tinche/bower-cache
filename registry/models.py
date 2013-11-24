@@ -1,13 +1,11 @@
 from os.path import join
 from shutil import rmtree
 
+from django.conf import settings
 from django.db import models
-from django.db.models.base import ModelBase
-from git.repo.base import Repo
 
 from .gitwrapper import pull_from_origin, clone_from
 from .managers import ClonedRepoManager
-from .settings import REPO_ROOT, REPO_URL
 
 import logging
 
@@ -31,18 +29,22 @@ class ClonedRepo(models.Model):
     objects = ClonedRepoManager()
 
     def save(self, *args, **kwargs):
-        clone_from(self.origin, join(REPO_ROOT, self.name))
+        repo_root = settings.REPO_ROOT
+        clone_from(self.origin, join(repo_root, self.name))
 
     def delete(self, *args, **kwargs):
-        rmtree(join(REPO_ROOT, self.name))
+        repo_root = settings.REPO_ROOT
+        rmtree(join(repo_root, self.name))
 
     def pull(self):
         """Pull from the origin."""
-        pull_from_origin(join(REPO_ROOT, self.name))
+        repo_root = settings.REPO_ROOT
+        pull_from_origin(join(repo_root, self.name))
 
     def to_package(self):
         """Return the package representation of this repo."""
-        return Package(name=self.name, url=REPO_URL + self.name)
+        repo_url = settings.REPO_URL
+        return Package(name=self.name, url=repo_url + self.name)
 
     def __str__(self):
         return "%s (cloned from %s)" % (self.name, self.origin)

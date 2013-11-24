@@ -1,6 +1,5 @@
 """Celery tasks."""
 import celery
-from celery.exceptions import TimeoutError
 
 from .models import ClonedRepo
 

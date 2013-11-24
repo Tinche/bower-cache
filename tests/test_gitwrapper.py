@@ -1,8 +1,6 @@
 """Tests for the gitwrapper module."""
-import tempfile
-import shutil
-
 import pytest
+import mock
 
 from registry import gitwrapper
 
@@ -14,6 +12,22 @@ def test_pull_from_origin(tmpdir):
     """
     gitwrapper.clone_from('git://github.com/Tinche/bower-cache', tmpdir)
     gitwrapper.pull_from_origin(tmpdir)
+
+
+@mock.patch('envoy.run')
+def test_pull_from_origin_fail(run):
+    """Simulate a failure to pull from origin.
+
+    This test uses mocks, and doesn't reach out to the Internet.
+    """
+    from envoy import Response
+    resp = Response()
+    resp.status_code = 1  # Set a non-0 status code
+
+    run.return_value = resp
+
+    with pytest.raises(gitwrapper.GitException):
+        gitwrapper.pull_from_origin('/var/git/bower-cache')
 
 
 def test_clone_nonexistent(tmpdir):
