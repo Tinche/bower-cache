@@ -48,6 +48,7 @@ class Coverage(TestCommand):
         errno = pytest.main(self.test_args)
         cov.stop()
         cov.save()
+        cov.report()
         sys.exit(errno)
 
 setup(
@@ -63,11 +64,11 @@ setup(
     ],
     include_package_data=True,
     install_requires=[
-        'Django >= 1.5, < 1.6',
-        'djangorestframework==2.3.8',
+        'Django >= 1.6, < 1.7',
+        'djangorestframework==2.3.9',
         'envoy==0.0.2',
         'GitPython==0.3.2.RC1',
-        'requests==2.0.0',
+        'requests==2.1.0',
         'django-celery==3.0.23'
     ],
     tests_require=[

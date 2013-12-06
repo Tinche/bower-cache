@@ -10,10 +10,12 @@ logger = logging.getLogger(__name__)
 
 
 class ClonedRepoQuerySet(query.QuerySet):
+    """A file-system based query set for cloned repos."""
     def __init__(self, model=None, repos=None):
-        self.repos = repos if repos is not None \
-                     else ClonedRepoQuerySet._get_all_repos()
         self.model = model
+        self._result_cache = repos
+        self._for_write = False
+        self._prefetch_related_lookups = []
 
     def get(self, *args, **kwargs):
         logger.debug("Get called with %s, %s" % (str(args), str(kwargs)))
@@ -23,31 +25,39 @@ class ClonedRepoQuerySet(query.QuerySet):
         return results[0]
 
     def __repr__(self):
-        return str(self.repos)
+        return str(self._result_cache)
 
     def __iter__(self):
-        return iter(self.repos)
+        return iter(self._result_cache)
+
+    def iterator(self):
+        """Do the actual lookup and return an iterator over the results."""
+        return ClonedRepoQuerySet._get_all_repos()
 
     def exists(self):
         return False
 
     def filter(self, **kwargs):
-        filtered = self.repos
+        self._fetch_all()
+        filtered = self._result_cache
         for key, val in kwargs.items():
             filtered = [rep for rep in filtered if getattr(rep, key) == val]
         return ClonedRepoQuerySet(model=self.model, repos=filtered)
 
     def __len__(self):
-        return len(self.repos)
+        self._fetch_all()
+        return len(self._result_cache)
 
     def __bool__(self):
-        return len(self.repos)
+        return len(self)
 
     def __getitem__(self, index):
-        return self.repos[index]
+        self._fetch_all()
+        return self._result_cache[index]
 
     def delete(self):
-        for repo in self.repos:
+        self._fetch_all()
+        for repo in self._result_cache:
             repo.delete()
 
     @staticmethod
