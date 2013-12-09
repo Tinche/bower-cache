@@ -5,6 +5,7 @@ UPSTREAM_BOWER_REGISTRY = 'https://bower.herokuapp.com'
 
 # Celery settings.
 BROKER_URL = 'django://'
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 import djcelery
 djcelery.setup_loader()
 

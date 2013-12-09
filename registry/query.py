@@ -24,15 +24,12 @@ class ClonedRepoQuerySet(query.QuerySet):
             raise self.model.DoesNotExist()
         return results[0]
 
-    def __repr__(self):
-        return str(self._result_cache)
-
     def __iter__(self):
-        return iter(self._result_cache)
+        return self.iterator()
 
     def iterator(self):
         """Do the actual lookup and return an iterator over the results."""
-        return ClonedRepoQuerySet._get_all_repos()
+        return iter(ClonedRepoQuerySet._get_all_repos())
 
     def exists(self):
         return False
@@ -47,9 +44,6 @@ class ClonedRepoQuerySet(query.QuerySet):
     def __len__(self):
         self._fetch_all()
         return len(self._result_cache)
-
-    def __bool__(self):
-        return len(self)
 
     def __getitem__(self, index):
         self._fetch_all()

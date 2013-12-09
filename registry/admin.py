@@ -17,7 +17,7 @@ LOG = logging.getLogger(__name__)
 class ClonedRepoChangeList(ChangeList):
 
     def get_query_set(self, request):
-        return self.root_query_set
+        return self.root_queryset
 
     def get_results(self, request):
         all_repo_count = len(self.root_query_set)

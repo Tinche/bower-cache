@@ -90,3 +90,35 @@ def test_add_repo_no_origin(admin_client):
     assert resp.status_code == 200
     soup = BeautifulSoup(resp.content)
     assert 'Please provide an origin URL' in soup.get_text()
+
+
+@mock.patch('registry.bowerlib.get_package')
+def test_add_repo_bower_error(get_package, admin_client):
+    """Test submitting a cloned repo, and Bower returning an IO error.
+
+    This test doesn't reach out to external services.
+    """
+    get_package.side_effect = IOError("An IO Error occured.")
+    # Add a package through the form.
+    resp = admin_client.post('/admin/registry/clonedrepo/add/',
+                             {'name': 'angular', 'origin_source': 'upstream'})
+
+    assert resp.status_code == 200
+    soup = BeautifulSoup(resp.content)
+    assert get_package.side_effect.message in soup.get_text()
+
+
+@mock.patch('registry.bowerlib.get_package')
+def test_add_repo_bower_clueless(get_package, admin_client):
+    """Test submitting a cloned repo, and Bower not knowing about it.
+
+    This test doesn't reach out to external services.
+    """
+    get_package.return_value = None
+    # Add a package through the form.
+    resp = admin_client.post('/admin/registry/clonedrepo/add/',
+                             {'name': 'angular', 'origin_source': 'upstream'})
+
+    assert resp.status_code == 200
+    soup = BeautifulSoup(resp.content)
+    assert 'Upstream registry has no knowledge' in soup.get_text()

@@ -24,7 +24,7 @@ class Package(models.Model):
 class ClonedRepo(models.Model):
     """A cloned Bower package git repository, local to the system."""
     name = models.CharField(max_length=50, primary_key=True)
-    origin = models.CharField(max_length=100)
+    origin = models.CharField(max_length=100, null=True)
 
     objects = ClonedRepoManager()
 
