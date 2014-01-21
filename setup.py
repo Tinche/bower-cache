@@ -4,12 +4,10 @@
 import os
 import sys
 
-import registry
-
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
-VERSION = registry.__version__
+VERSION = '0.1.2'
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
@@ -69,7 +67,7 @@ setup(
         'envoy==0.0.2',
         'GitPython==0.3.2.RC1',
         'requests==2.1.0',
-        'django-celery==3.0.23'
+        'django-celery==3.1.1'
     ],
     tests_require=[
         'pytest-django',

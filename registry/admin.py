@@ -20,10 +20,10 @@ class ClonedRepoChangeList(ChangeList):
         return self.root_queryset
 
     def get_results(self, request):
-        all_repo_count = len(self.root_query_set)
+        all_repo_count = len(self.root_queryset)
         self.result_count = all_repo_count
         self.full_result_count = all_repo_count
-        self.result_list = list(self.root_query_set)
+        self.result_list = list(self.root_queryset)
         self.can_show_all = True
         self.multi_page = False
         self.paginator = self.model_admin.get_paginator(request,
@@ -97,7 +97,7 @@ class ClonedRepoAdmin(admin.ModelAdmin):
         LOG.info("Pull requested for %s." % repo_name)
         repo = get_object_or_404(self.model, name=repo_name)
         repo.pull()
-        self.message_user(request, "Repo %s successfully updated." % repo_name, 
+        self.message_user(request, "Repo %s successfully updated." % repo_name,
                           level=messages.SUCCESS)
         return redirect('admin:registry_clonedrepo_change', repo_name)
 

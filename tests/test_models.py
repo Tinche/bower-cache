@@ -1,6 +1,7 @@
 """Unit tests for the models."""
 from registry.models import ClonedRepo, Package
 
+
 def test_cloned_repo_as_package(settings):
     """Test the cloned repo model converting itself into a package."""
     pkg_name = 'aname'

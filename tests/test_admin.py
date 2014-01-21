@@ -2,6 +2,8 @@
 import re
 import mock
 
+import os.path
+
 from bs4 import BeautifulSoup
 
 
@@ -76,6 +78,16 @@ def test_cloned_repo_view(pull_from_origin, tmpdir, settings, admin_client):
     assert resp.status_code == 302
     pull_from_origin.assert_called_with(tmpdir.join('angular'))
 
+    # Now remove the cloned repository.
+    admin_client.post('/admin/registry/clonedrepo/angular/delete/',
+                      {'post': 'yes'})
+
+    resp = admin_client.get('/admin/registry/clonedrepo/')
+    assert resp.status_code == 200
+
+    assert '0 cloned repos' in resp.content
+    assert 'Add cloned repo' in resp.content
+
 
 def test_add_repo_no_origin(admin_client):
     """Test submitting a cloned repo with origin_source and without an origin_
@@ -90,6 +102,36 @@ def test_add_repo_no_origin(admin_client):
     assert resp.status_code == 200
     soup = BeautifulSoup(resp.content)
     assert 'Please provide an origin URL' in soup.get_text()
+
+@mock.patch('registry.models.clone_from')
+def test_add_git_error(clone_from, tmpdir, settings, admin_client):
+    """Test submitting a cloned repo, the clone of which fails due to a git
+    error.
+
+    This test doesn't reach out to external services.
+    """
+    settings.REPO_ROOT = str(tmpdir)
+
+    from django.conf import settings
+    from registry.gitwrapper import GitException
+    from registry.models import ClonedRepo
+    clone_from.side_effect = GitException("Surprise!")
+
+    url = 'git://a-url.git'
+    base_path = settings.REPO_ROOT
+
+    # Add a package through the form.
+    resp = admin_client.post('/admin/registry/clonedrepo/add/',
+                             {'name': 'angular', 'origin_source': 'origin_url',
+                              'origin_url': url}, follow=True)
+
+    assert resp.status_code == 200
+
+    soup = BeautifulSoup(resp.content)
+    assert 'Surprise!' in soup.get_text()
+
+    clone_from.assert_called_with(url, os.path.join(base_path, 'angular'))
+    assert not ClonedRepo.objects.all()
 
 
 @mock.patch('registry.bowerlib.get_package')
@@ -110,7 +152,7 @@ def test_add_repo_bower_error(get_package, admin_client):
 
 @mock.patch('registry.bowerlib.get_package')
 def test_add_repo_bower_clueless(get_package, admin_client):
-    """Test submitting a cloned repo, and Bower not knowing about it.
+    """Test submitting a cloned repo, with Bower not knowing about it.
 
     This test doesn't reach out to external services.
     """
