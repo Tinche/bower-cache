@@ -49,10 +49,11 @@ class ClonedRepoQuerySet(query.QuerySet):
         self._fetch_all()
         return self._result_cache[index]
 
-    def delete(self):
-        self._fetch_all()
-        for repo in self._result_cache:
-            repo.delete()
+     # Unused at the moment.
+#    def delete(self):
+#        self._fetch_all()
+#        for repo in self._result_cache:
+#            repo.delete()
 
     @staticmethod
     def _get_origin(full_repo_dir):
