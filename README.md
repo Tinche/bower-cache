@@ -12,8 +12,9 @@ The admin interface is available for both functionalities.
 
 ## Install the dependencies
 
-    mkvirtualenv registry
-    pip install -r requirements.txt
+    virtualenv .
+    . bin/activate
+    pip install -e .
 
 ## Sync your database and create an admin user
 
@@ -26,7 +27,7 @@ The admin interface is available for both functionalities.
 ## Log into the admin
 
 If you're using the dev server, the admin will be available at 
-http://127.0.0.1:8000/ by default. Open the URL and log in as the admin.
+http://127.0.0.1:8000/admin by default. Open the URL and log in as the admin.
 
 ## Clone and cache remote Bower repositories
 
@@ -41,7 +42,7 @@ to create the repository URL.
 It is generally expected a git daemon will be run separately and will serve
 the REPO_ROOT directory:
 
-git daemon --export-all --base-path=/var/git/
+    git daemon --export-all --base-path=/var/git/
 
 After this is set up, remote repositories can be cloned from the admin via the
 'Add Cloned Repo' button. For example, creating a cloned repo with the name
