@@ -65,15 +65,15 @@ setup(
         'Django >= 1.6, < 1.7',
         'djangorestframework==2.3.9',
         'envoy==0.0.2',
-        'GitPython==0.3.2.RC1',
         'requests==2.1.0',
-        'django-celery==3.1.1'
+        'django-celery==3.1.1',
+        'configparser==3.3.0r2',
     ],
     tests_require=[
         'pytest-django',
         'coverage',
         'mock',
-        'beautifulsoup4'
+        'beautifulsoup4',
     ],
     cmdclass={'test': PyTest, 'coverage': Coverage},
     license="MIT",

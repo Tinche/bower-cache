@@ -5,7 +5,9 @@ the git binary is invoked via the envoy module.
 
 """
 import logging
+import os.path
 import urlparse
+from configparser import ConfigParser
 
 import envoy
 
@@ -30,6 +32,13 @@ def pull_from_origin(repo_path):
         raise GitException(resp.std_err)
     else:
         LOG.info("Pull successful.")
+
+
+def read_remote_origin(repo_dir):
+    """Read the remote origin URL from the given git repo, or None if unset."""
+    conf = ConfigParser()
+    conf.read(os.path.join(repo_dir, '.git/config'))
+    return conf.get('remote "origin"', 'url')
 
 
 def clone_from(repo_url, repo_dir):

@@ -4,7 +4,7 @@ from os import path
 
 from django.db.models import query
 
-from git.repo.base import Repo
+from .gitwrapper import read_remote_origin
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +56,6 @@ class ClonedRepoQuerySet(query.QuerySet):
 #            repo.delete()
 
     @staticmethod
-    def _get_origin(full_repo_dir):
-        return Repo(full_repo_dir).remotes.origin.url
-
-    @staticmethod
     def _get_all_repos():
         from .models import ClonedRepo
         from django.conf import settings
@@ -67,7 +63,7 @@ class ClonedRepoQuerySet(query.QuerySet):
         repo_dirs = (dir for dir in os.listdir(repo_root)
                                  if path.isdir(path.join(repo_root, dir)))
         repos = [ClonedRepo(name=repo_dir,
-                            origin=ClonedRepoQuerySet._get_origin(
-                                         path.join(repo_root, repo_dir)))
+                            origin=read_remote_origin(path.join(repo_root,
+                                                                repo_dir)))
                  for repo_dir in repo_dirs]
         return repos
