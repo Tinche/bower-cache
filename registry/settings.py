@@ -3,19 +3,23 @@ REPO_ROOT = '/var/git'
 REPO_URL = 'git://localhost/'
 UPSTREAM_BOWER_REGISTRY = 'https://bower.herokuapp.com'
 
+
+# Security - change this too.
+ALLOWED_HOSTS = ['*']
+SECRET_KEY = 'r30*fwaj6#%^*_i@@ges__+4g$79-v=dd5a^l75$%_b@35m^yu'
+
 # Celery settings.
 BROKER_URL = 'django://'
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 import djcelery
 djcelery.setup_loader()
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 MANAGERS = ADMINS
-ALLOWED_HOSTS = []
 TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -32,7 +36,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-SECRET_KEY = 'r30*fwaj6#%^*_i@@ges__+4g$79-v=dd5a^l75$%_b@35m^yu'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',

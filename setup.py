@@ -68,6 +68,7 @@ setup(
         'requests==2.2.1',
         'django-celery==3.1.1',
         'configparser==3.3.0r2',
+        'dj-static==0.0.5',
     ],
     tests_require=[
         'pytest-django',
