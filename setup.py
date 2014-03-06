@@ -7,7 +7,7 @@ import sys
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
@@ -49,6 +49,25 @@ class Coverage(TestCommand):
         cov.report()
         sys.exit(errno)
 
+install_requires = [
+    'Django >= 1.6, < 1.7',
+    'djangorestframework >= 2.3.12, < 2.4',
+    'envoy==0.0.2',
+    'requests==2.2.1',
+    'django-celery==3.1.9',
+    'dj-static==0.0.5',
+]
+
+tests_require = [
+    'pytest-django',
+    'coverage',
+    'beautifulsoup4',
+]
+
+if sys.version_info[0] == 2:
+    install_requires.append('configparser==3.3.0r2')
+    tests_require.append('mock==1.0.1')
+
 setup(
     name='bower-cache',
     version=VERSION,
@@ -61,21 +80,8 @@ setup(
         'registry',
     ],
     include_package_data=True,
-    install_requires=[
-        'Django >= 1.6, < 1.7',
-        'djangorestframework >= 2.3.12, < 2.4',
-        'envoy==0.0.2',
-        'requests==2.2.1',
-        'django-celery==3.1.1',
-        'configparser==3.3.0r2',
-        'dj-static==0.0.5',
-    ],
-    tests_require=[
-        'pytest-django',
-        'coverage',
-        'mock',
-        'beautifulsoup4',
-    ],
+    install_requires=install_requires,
+    tests_require=tests_require,
     cmdclass={'test': PyTest, 'coverage': Coverage},
     license="MIT",
     zip_safe=False,
