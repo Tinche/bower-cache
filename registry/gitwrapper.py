@@ -6,10 +6,11 @@ the git binary is invoked via the envoy module.
 """
 import logging
 import os.path
-import urlparse
 from configparser import ConfigParser
 
 import envoy
+
+from ._compat import urlparse
 
 LOG = logging.getLogger(__name__)
 

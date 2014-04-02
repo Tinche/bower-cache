@@ -1,6 +1,6 @@
 """Tests for the admin additions."""
 import re
-import mock
+from test_registry._compat import mock
 
 import os.path
 
@@ -38,8 +38,8 @@ def test_packages_view(admin_client):
     resp = admin_client.get('/admin/registry/package/')
     assert resp.status_code == 200
 
-    assert '0 packages' in resp.content
-    assert 'Add package' in resp.content
+    assert b'0 packages' in resp.content
+    assert b'Add package' in resp.content
 
     # Now add a package through the form.
     admin_client.post('/admin/registry/package/add/',
@@ -48,7 +48,7 @@ def test_packages_view(admin_client):
     resp = admin_client.get('/admin/registry/package/')
     assert resp.status_code == 200
 
-    assert '1 package' in resp.content
+    assert b'1 package' in resp.content
 
 
 @mock.patch('registry.models.pull_from_origin')
@@ -61,8 +61,8 @@ def test_cloned_repo_view(pull_from_origin, tmpdir, settings, admin_client):
     resp = admin_client.get('/admin/registry/clonedrepo/')
     assert resp.status_code == 200
 
-    assert '0 cloned repos' in resp.content
-    assert 'Add cloned repo' in resp.content
+    assert b'0 cloned repos' in resp.content
+    assert b'Add cloned repo' in resp.content
 
     # Now add a package through the form.
     admin_client.post('/admin/registry/clonedrepo/add/',
@@ -71,7 +71,7 @@ def test_cloned_repo_view(pull_from_origin, tmpdir, settings, admin_client):
     resp = admin_client.get('/admin/registry/clonedrepo/')
     assert resp.status_code == 200
 
-    assert '1 cloned repo' in resp.content
+    assert b'1 cloned repo' in resp.content
 
     # Try pulling from origin. The actual pull is mocked.
     resp = admin_client.get('/admin/registry/clonedrepo/angular/pull/')
@@ -85,8 +85,8 @@ def test_cloned_repo_view(pull_from_origin, tmpdir, settings, admin_client):
     resp = admin_client.get('/admin/registry/clonedrepo/')
     assert resp.status_code == 200
 
-    assert '0 cloned repos' in resp.content
-    assert 'Add cloned repo' in resp.content
+    assert b'0 cloned repos' in resp.content
+    assert b'Add cloned repo' in resp.content
 
 
 def test_add_repo_no_origin(admin_client):
@@ -147,7 +147,7 @@ def test_add_repo_bower_error(get_package, admin_client):
 
     assert resp.status_code == 200
     soup = BeautifulSoup(resp.content)
-    assert get_package.side_effect.message in soup.get_text()
+    assert str(get_package.side_effect) in soup.get_text()
 
 
 @mock.patch('registry.bowerlib.get_package')

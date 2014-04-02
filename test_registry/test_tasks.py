@@ -1,16 +1,16 @@
 """Tests for the Celery tasks."""
 import os.path
 
-import mock
-
 from registry import tasks
 from registry.models import ClonedRepo
+from test_registry._compat import mock
 
 
 def test_clone_repo(tmpdir, settings):
     """Tests the cloning task.
 
     This task reaches out to the Internet (Github)."""
+    print settings
     settings.REPO_ROOT = str(tmpdir)
     tasks.clone_repo('bower-cache', 'git://github.com/Tinche/bower-cache')
     assert len(tmpdir.listdir()) == 1

@@ -1,15 +1,17 @@
+"""The Admin module for the Bower Cache registry."""
 import logging
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib import admin, messages
 from django.contrib.admin.views.main import ChangeList
 from django.shortcuts import redirect, get_object_or_404
 
+from . import bowerlib
 from .models import ClonedRepo, Package
 from .query import ClonedRepoQuerySet
-from registry import bowerlib, settings
 
 LOG = logging.getLogger(__name__)
 
@@ -87,7 +89,7 @@ class ClonedRepoAdmin(admin.ModelAdmin):
         try:
             obj.save()
         except Exception as exc:
-            self.message_user(request, "Save failed: %s" % str(exc.message),
+            self.message_user(request, "Save failed: %s" % str(exc),
                               level=messages.ERROR)
             raise ValidationError(str(exc))
         # A success message will be flashed by default
@@ -130,7 +132,7 @@ class NewRepoForm(forms.ModelForm):
             try:
                 upstream_pkg = bowerlib.get_package(upstream, name)
             except IOError as exc:
-                msg = exc.message
+                msg = str(exc)
                 self._errors['origin_source'] = self.error_class([msg])
             else:
                 if not upstream_pkg:

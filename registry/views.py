@@ -2,6 +2,7 @@
 import logging
 
 from django.http import Http404
+from django.conf import settings
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.generics import (ListAPIView, ListCreateAPIView,
@@ -9,7 +10,7 @@ from rest_framework.generics import (ListAPIView, ListCreateAPIView,
 
 from .models import Package, ClonedRepo
 from .serializers import PackageSerializer
-from . import bowerlib, tasks, settings
+from . import bowerlib, tasks
 
 LOG = logging.getLogger(__name__)
 

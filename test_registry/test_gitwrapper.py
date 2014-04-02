@@ -1,8 +1,8 @@
 """Tests for the gitwrapper module."""
 import pytest
-import mock
 
 from registry import gitwrapper
+from test_registry._compat import mock
 
 
 def test_pull_from_origin(tmpdir):

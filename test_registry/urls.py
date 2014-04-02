@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from .views import PackagesListView, PackagesRetrieveView, PackagesSearchView
+from registry.views import PackagesListView, PackagesRetrieveView, PackagesSearchView
 
 admin.autodiscover()
 

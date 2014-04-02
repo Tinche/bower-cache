@@ -1,7 +1,6 @@
 import json
 
-import mock
-from mock import MagicMock
+from test_registry._compat import mock
 
 from registry.models import Package
 
@@ -22,12 +21,12 @@ class PackagesListViewTests(TestCase):
         url = reverse("list")
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
-        results = json.loads(response.content)
+        results = json.loads(response.content.decode())
         self.assertEqual(2, len(results))
-        self.assertEqual(results[0]['url'], '/foo')
-        self.assertEqual(results[0]['name'], 'ember')
-        self.assertEqual(results[1]['url'], '/bar')
-        self.assertEqual(results[1]['name'], 'moment')
+        self.assertEqual(results[0]['url'], u'/foo')
+        self.assertEqual(results[0]['name'], u'ember')
+        self.assertEqual(results[1]['url'], u'/bar')
+        self.assertEqual(results[1]['name'], u'moment')
 
 
 class PackagesFindViewTests(TestCase):
@@ -37,9 +36,9 @@ class PackagesFindViewTests(TestCase):
         url = reverse("find", kwargs={'name': 'ember'})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
-        result = json.loads(response.content)
-        self.assertEqual(result['url'], '/foo')
-        self.assertEqual(result['name'], 'ember')
+        result = json.loads(response.content.decode())
+        self.assertEqual(result['url'], u'/foo')
+        self.assertEqual(result['name'], u'ember')
 
     @mock.patch('registry.bowerlib.get_package')
     def test_returns_404_when_package_name_not_found(self, get_package):
@@ -68,7 +67,7 @@ class PackagesFindViewTests(TestCase):
 
         # Mock the clone_repo task dispatch; throw an exception so we don't
         # wait.
-        task = MagicMock()
+        task = mock.MagicMock()
         clone.delay.return_value = task
         task.get.side_effect = TimeoutError()
 
@@ -89,9 +88,9 @@ class PackagesFindViewTests(TestCase):
         url = reverse("find", kwargs={'name': 'ember-data'})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
-        result = json.loads(response.content)
-        self.assertEqual(result['url'], '/foo')
-        self.assertEqual(result['name'], 'ember-data')
+        result = json.loads(response.content.decode())
+        self.assertEqual(result['url'], u'/foo')
+        self.assertEqual(result['name'], u'ember-data')
 
 
 class PackagesSearchViewTests(TestCase):
@@ -101,24 +100,24 @@ class PackagesSearchViewTests(TestCase):
         url = reverse("search", kwargs={'name': 'mbe'})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
-        results = json.loads(response.content)
+        results = json.loads(response.content.decode())
         self.assertEqual(1, len(results))
-        self.assertEqual(results[0]['url'], '/foo')
-        self.assertEqual(results[0]['name'], 'ember')
+        self.assertEqual(results[0]['url'], u'/foo')
+        self.assertEqual(results[0]['name'], u'ember')
 
     def test_returns_empty_list_when_search_finds_no_match(self):
         Package.objects.create(name="ember", url="/foo")
         url = reverse("search", kwargs={'name': 'wat'})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
-        self.assertEqual('[]', response.content)
+        self.assertEqual('[]', response.content.decode())
 
     def test_returns_list_of_packages_when_name_includes_hyphen(self):
         Package.objects.create(name="ember-data", url="/foo")
         url = reverse("search", kwargs={'name': 'ember-da'})
         response = self.client.get(url)
         self.assertEqual(200, response.status_code)
-        results = json.loads(response.content)
+        results = json.loads(response.content.decode())
         self.assertEqual(1, len(results))
-        self.assertEqual(results[0]['url'], '/foo')
-        self.assertEqual(results[0]['name'], 'ember-data')
+        self.assertEqual(results[0]['url'], u'/foo')
+        self.assertEqual(results[0]['name'], u'ember-data')

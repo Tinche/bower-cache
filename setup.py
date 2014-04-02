@@ -4,8 +4,9 @@
 import os
 import sys
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
+
 
 VERSION = '0.1.3'
 
@@ -22,7 +23,7 @@ readme = open('README.md').read()
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['tests']
+        self.test_args = ['test_registry']
         self.test_suite = True
 
     def run_tests(self):
@@ -35,7 +36,7 @@ class PyTest(TestCommand):
 class Coverage(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['tests']
+        self.test_args = ['test_registry']
         self.test_suite = True
 
     def run_tests(self):
@@ -54,7 +55,7 @@ install_requires = [
     'djangorestframework >= 2.3.12, < 2.4',
     'envoy==0.0.2',
     'requests==2.2.1',
-    'django-celery==3.1.9',
+    'django-celery==3.1.10',
     'dj-static==0.0.5',
 ]
 
@@ -76,9 +77,10 @@ setup(
     author='Tin Tvrtkovic',
     author_email='tinchester@gmail.com',
     url='https://github.com/tinche/bower-cache',
-    packages=[
-        'registry',
-    ],
+    packages=['registry', 'registry.bin'],
+    entry_points={
+        'console_scripts': ['bower-cache-init = registry.bin:init_site'],
+    },
     include_package_data=True,
     install_requires=install_requires,
     tests_require=tests_require,
