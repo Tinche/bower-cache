@@ -77,9 +77,9 @@ setup(
     author='Tin Tvrtkovic',
     author_email='tinchester@gmail.com',
     url='https://github.com/tinche/bower-cache',
-    packages=['registry', 'registry.bin'],
+    packages=['registry', 'registry.commands'],
     entry_points={
-        'console_scripts': ['bower-cache-init = registry.bin:init_site'],
+        'console_scripts': ['bower-cache-init = registry.commands:init_site'],
     },
     include_package_data=True,
     install_requires=install_requires,
