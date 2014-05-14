@@ -11,50 +11,54 @@ This is a combination Bower registry/caching proxy. It can do two things:
 
 The admin interface is available for both functionalities.
 
-## Install the dependencies
+## Install
+
+We strongly suggest installing into a virtualenv.
 
     virtualenv .
     . bin/activate
-    pip install -e .
+    pip install bower-cache
 
-## Sync your database and create an admin user
+## Create a site
 
-    python manage.py syncdb
+After Bower Cache has been installed, use the bower-cache-init command to
+initialize a Bower Cache site. The site contains configuration and is where the
+packages are actually cached.
 
-## Run the webserver locally
+    bower-cache-init /var/lib/bower-cache
 
-    python manage.py runserver
+The site contains a standard Django manage.py file. In order to log into the
+admin site, the admin user (which has been created as part of site
+initialization) needs a password. Set it by running
 
-## Log into the admin
+    python manage.py changepassword admin
+
+## Run the services
+
+Bower Cache requires several services to run for it to be fully functional. The
+commands listed expect to be run from the site directory (the directory
+containing manage.py).
+
+Run Gunicorn to serve the REST interface and admin site:
+
+    gunicorn bowercachesite:wsgi
+
+Run a single-process Celery worker, including the scheduler (-B):
+
+    python manage.py celery worker -c 1 -B
+
+Run a git daemon to serve the cached packages:
+
+    git daemon --export-all --base-path=<site>/cache
+
+## Admin interface
 
 If you're using the dev server, the admin will be available at 
 http://127.0.0.1:8000/admin by default. Open the URL and log in as the admin.
 
-## Clone and cache remote Bower repositories
+The admin interface allows managing the cached packages, including manually
+issuing caching tasks and setting up daily package updates.
 
-Ensure the correct values are set in the settings (registry/settings.py).
-
-REPO_ROOT is the local file system path to a writable directory into which the
-remote repositories will be cloned.
-
-REPO_URL is the URL fragment the system will prepend to the repository names
-to create the repository URL.
-
-It is generally expected a git daemon will be run separately and will serve
-the REPO_ROOT directory:
-
-    git daemon --export-all --base-path=/var/git/
-
-After this is set up, remote repositories can be cloned from the admin via the
-'Add Cloned Repo' button. For example, creating a cloned repo with the name
-'jquery' and origin 'https://github.com/jquery/jquery.git' will check out 
-jQuery into the REPO_ROOT directory, and map the name 'jquery' to REPO_URL + 
-'jquery'.
-
-## Development
-
-    python manage.py test test
-      
 ## License
 
 Copyright © 2013 Toran Billups, Tin Tvrtković.

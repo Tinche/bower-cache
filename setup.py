@@ -4,7 +4,7 @@
 import os
 import sys
 
-from setuptools import setup, find_packages
+from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
 
@@ -17,13 +17,13 @@ if sys.argv[-1] == 'publish':
     print(" git push --tags")
     sys.exit()
 
-readme = open('README.md').read()
+with open('README.md') as f: readme = f.read()
 
 
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['test_registry']
+        self.test_args = ['test_bowercache']
         self.test_suite = True
 
     def run_tests(self):
@@ -36,7 +36,7 @@ class PyTest(TestCommand):
 class Coverage(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['test_registry']
+        self.test_args = ['test_bowercache']
         self.test_suite = True
 
     def run_tests(self):
@@ -51,12 +51,10 @@ class Coverage(TestCommand):
         sys.exit(errno)
 
 install_requires = [
-    'Django >= 1.6, < 1.7',
-    'djangorestframework >= 2.3.12, < 2.4',
-    'envoy==0.0.2',
-    'requests==2.2.1',
+    'django-bower-cache==0.1.3',
     'django-celery==3.1.10',
     'dj-static==0.0.5',
+    'gunicorn==18.0',
 ]
 
 tests_require = [
@@ -66,7 +64,6 @@ tests_require = [
 ]
 
 if sys.version_info[0] == 2:
-    install_requires.append('configparser==3.3.0r2')
     tests_require.append('mock==1.0.1')
 
 setup(
@@ -77,9 +74,9 @@ setup(
     author='Tin Tvrtkovic',
     author_email='tinchester@gmail.com',
     url='https://github.com/tinche/bower-cache',
-    packages=['registry', 'registry.commands'],
+    packages=['bowercache'],
     entry_points={
-        'console_scripts': ['bower-cache-init = registry.commands:init_site'],
+        'console_scripts': ['bower-cache-init = bowercache:init_site'],
     },
     include_package_data=True,
     install_requires=install_requires,

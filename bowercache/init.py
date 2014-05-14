@@ -8,7 +8,7 @@ from pkg_resources import resource_filename
 
 from django.core import management
 
-import registry
+import bowercache
 
 
 def init_site():
@@ -16,7 +16,7 @@ def init_site():
     site_name = 'bowercachesite'
     dir_name = sys.argv[1] if len(sys.argv) > 1 else site_name
     settings = site_name + ".settings"
-    template_filename = resource_filename(registry.__name__,
+    template_filename = resource_filename(bowercache.__name__,
                                           'project_template')
     cwd = os.getcwd()
     full_dir_name = os.path.join(cwd, dir_name)
