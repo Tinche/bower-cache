@@ -8,7 +8,7 @@ from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
 
-VERSION = '0.1.3'
+VERSION = '0.1.4'
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
@@ -51,7 +51,7 @@ class Coverage(TestCommand):
         sys.exit(errno)
 
 install_requires = [
-    'django-bower-cache==0.1.3',
+    'django-bower-cache==0.1.4',
     'django-celery==3.1.10',
     'dj-static==0.0.5',
     'gunicorn==18.0',
@@ -94,5 +94,6 @@ setup(
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
