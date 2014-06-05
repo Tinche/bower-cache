@@ -81,6 +81,9 @@ setup(
     include_package_data=True,
     install_requires=install_requires,
     tests_require=tests_require,
+    extras_require={
+        ':python_version=="2.6"': ['importlib'],
+    },
     cmdclass={'test': PyTest, 'coverage': Coverage},
     license="MIT",
     zip_safe=False,

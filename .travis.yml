@@ -7,6 +7,7 @@ before_install:
     - sudo apt-get install -qq git
 before_script:
     - pip install -e .
+    - if [ "$TRAVIS_PYTHON_VERSION" == "2.6" ]; then pip install importlib; fi
 script: python setup.py coverage
 after_success:
     - pip install python-coveralls && coveralls
