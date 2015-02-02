@@ -8,7 +8,7 @@ from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
 
-VERSION = '0.4.0'
+VERSION = '0.4.1'
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
