@@ -40,9 +40,9 @@ Bower Cache requires several services to run for it to be fully functional. The
 commands listed expect to be run from the site directory (the directory
 containing manage.py).
 
-Run Gunicorn to serve the REST interface and admin site:
+Run Gunicorn to serve the REST interface and admin site on port 8000:
 
-    gunicorn bowercachesite:wsgi
+    gunicorn bowercachesite.wsgi
 
 Run a single-process Celery worker, including the scheduler (-B):
 
