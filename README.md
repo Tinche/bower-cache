@@ -13,10 +13,11 @@ The admin interface is available for both functionalities.
 
 ## Install
 
-We strongly suggest installing into a virtualenv.
+We strongly suggest installing into a virtualenv, and updating pip and setuptools inside the virtualenv first.
 
     virtualenv .
     . bin/activate
+    pip install -U pip setuptools
     pip install bower-cache
 
 ## Create a site
