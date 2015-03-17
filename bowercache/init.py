@@ -9,6 +9,7 @@ from pkg_resources import resource_filename
 from django.core import management
 
 import bowercache
+from ._compat import reload
 
 
 def init_site():
@@ -19,7 +20,7 @@ def init_site():
     template_filename = resource_filename(bowercache.__name__,
                                           'project_template')
     cwd = os.getcwd()
-    full_dir_name = os.path.join(cwd, dir_name)
+    full_dir_name = os.path.abspath(os.path.join(cwd, dir_name))
 
     startproject_args = ['startproject', site_name]
     if dir_name != site_name:
@@ -28,9 +29,8 @@ def init_site():
     management.call_command(*startproject_args, template=template_filename)
 
     # Now magically turn into manage.py!
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings)
-    if not dir_name == '.':
-        sys.path.insert(0, full_dir_name)
+    os.environ["DJANGO_SETTINGS_MODULE"] = settings
+    sys.path.insert(0, full_dir_name)
 
     from django import conf
     reload(conf)

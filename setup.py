@@ -51,10 +51,10 @@ class Coverage(TestCommand):
         sys.exit(errno)
 
 install_requires = [
-    'django-bower-cache==0.4.2',
+    'django-bower-cache==0.5.0',
     'django-celery==3.1.16',
     'dj-static==0.0.6',
-    'gunicorn==19.1.1',
+    'gunicorn==19.3.0',
 ]
 
 tests_require = [
@@ -97,6 +97,8 @@ setup(
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
