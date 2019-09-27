@@ -54,7 +54,7 @@ install_requires = [
     'django-bower-cache==0.5.0',
     'django-celery==3.1.16',
     'dj-static==0.0.6',
-    'gunicorn==19.3.0',
+    'gunicorn==19.5.0',
 ]
 
 tests_require = [
